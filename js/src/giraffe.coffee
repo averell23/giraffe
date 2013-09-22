@@ -28,14 +28,14 @@ _avg = (series) ->
 _max = (series) ->
   _.reduce(series, ((memo, val) ->
     return val if memo is null
-    return val if val > memo 
+    return val if val > memo
     return memo)
     ,null)
 
 _min = (series) ->
   _.reduce(series, ((memo, val) ->
     return val if memo is null
-    return val if val < memo 
+    return val if val < memo
     return memo)
     ,null)
 
@@ -69,15 +69,16 @@ refreshSummary = (graph) ->
   console.log("unknown summary function #{graph.args.summary}") unless summary_func
   y_data = _.map(_.flatten(_.pluck(graph.graph.series, 'data')), (d) -> d.y)
   $("#{graph.args.anchor} .graph-summary").html(graph.args.summary_formatter(summary_func(y_data)))
-  
+
 
 # builds the HTML scaffolding for the graphs
 # using a small mustache template
+# Removed:
+#                  {{#dashboard_description}}
+#                      <div class="well">{{{dashboard_description}}}</div>
+#                  {{/dashboard_description}}
 graphScaffold = ->
   graph_template = """
-                  {{#dashboard_description}}
-                      <div class="well">{{{dashboard_description}}}</div>
-                  {{/dashboard_description}}
                   {{#metrics}}
                     {{#start_row}}
                     <div class="row-fluid">
@@ -86,7 +87,6 @@ graphScaffold = ->
                         <h2>{{metric_alias}} <span class="pull-right graph-summary"><span></h2>
                         <div class="chart"></div>
                         <div class="timeline"></div>
-                        <p>{{metric_description}}</p>
                         <div class="legend"></div>
                       </div>
                     {{#end_row}}
@@ -105,7 +105,7 @@ graphScaffold = ->
       start_row: offset % 3 is 0
       end_row: offset % 3 is 2
       graph_id: i
-      span: 'span' + (4 * colspan)
+      span: 'span' + (2 * colspan)
       metric_alias: metric.alias
       metric_description: metric.description
     offset += colspan
@@ -161,7 +161,7 @@ generateEventsURL= (event_tags) ->
 
 # builds a graph object
 createGraph = (anchor, metric) ->
- 
+
   if graphite_url == 'demo'
     graph_provider = Rickshaw.Graph.Demo
   else
@@ -223,7 +223,7 @@ createGraph = (anchor, metric) ->
           element: $("#{anchor} .timeline")[0]
       refreshSummary(@)
 
-  
+
 Rickshaw.Graph.JSONP.Graphite = Rickshaw.Class.create(Rickshaw.Graph.JSONP,
   request: ->
     @refreshGraph(period)
@@ -244,7 +244,7 @@ Rickshaw.Graph.JSONP.Graphite = Rickshaw.Class.create(Rickshaw.Graph.JSONP,
         el.target == @args.annotator_target.replace(/["']/g, '')), @args.null_as) if @args.annotator_target
       for el, i in series
         @graph.series[i].data = el.data
-        @addTotals(i)
+        # @addTotals(i)
       @graph.renderer.unstack = @args.unstack
       @graph.render()
       # adding event annotations if events are specified
@@ -307,7 +307,7 @@ Rickshaw.Graph.JSONP.Graphite = Rickshaw.Class.create(Rickshaw.Graph.JSONP,
     @annotator ||= new GiraffeAnnotate
       graph: @graph
       element: $("#{@args.anchor} .timeline")[0]
-      
+
     @annotator.data = {}
     $(@annotator.elements.timeline).empty()
     active_annotation = $(@annotator.elements.timeline)
@@ -352,7 +352,7 @@ Rickshaw.Graph.Demo = Rickshaw.Class.create(Rickshaw.Graph.JSONP.Graphite,
     @seriesData = [ [], [], [], [], [], [], [], [], [] ]
     @random = new Rickshaw.Fixtures.RandomData(period/60 + 10)
 
-    for i in [0..60] 
+    for i in [0..60]
         @random.addData(@seriesData)
     @graph = new Rickshaw.Graph
       element: @args.element
@@ -412,7 +412,7 @@ Rickshaw.Graph.Demo = Rickshaw.Class.create(Rickshaw.Graph.JSONP.Graphite,
       for i in [0...@graph.series.length]
         @addTotals(i)
 )
-    
+
 ###
 #   Events and interaction
 ###
@@ -454,7 +454,7 @@ toggleCss = (css_selector) ->
     $.rule("#{css_selector} {display:none;}").appendTo('style')
 
 # toggle legend
-$('#legend-toggle').on 'click', -> 
+$('#legend-toggle').on 'click', ->
   $(this).toggleClass('active')
   $('.legend').toggle()
   false
@@ -467,19 +467,19 @@ $('#axis-toggle').on 'click', ->
   toggleCss('.x_tick')
   false
 
-# toggle x labels inside the graphs  
+# toggle x labels inside the graphs
 $('#x-label-toggle').on 'click', ->
   toggleCss('.rickshaw_graph .detail .x_label')
   $(this).toggleClass('active')
   false
 
-# toggle active item text display  
+# toggle active item text display
 $('#x-item-toggle').on 'click', ->
   toggleCss('.rickshaw_graph .detail .item.active')
   $(this).toggleClass('active')
   false
 
-# hashchange allows history for dashboard + timeframe  
+# hashchange allows history for dashboard + timeframe
 $(window).bind 'hashchange', (e) ->
   timeFrame = e.getState()?.timeFrame || $(".timepanel a.range[data-timeframe='#{default_period}']")[0].text || "1d"
   dash = e.getState()?.dashboard

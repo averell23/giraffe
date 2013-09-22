@@ -1,0 +1,63 @@
+var graphite_url = "url";  // enter your graphite url, e.g. http://your.graphite.com
+
+var dashboards =
+[
+  { "name": "The Raffe",  // give your dashboard a name (required!)
+    "refresh": 5000,  // each dashboard has its own refresh interval (in ms)
+    // add an (optional) dashboard description. description can be written in markdown / html.
+    // "description": "The better Giraffe",
+
+    "metrics":  // metrics is an array of charts on the dashboard
+    [
+      {
+        "alias": "Donations/h by type (last 24h)",  // display name for this metric
+        "targets":
+        [
+          "fnord",
+          "fnord",
+          "fnord",
+        ],// enter your graphite barebone target expression here
+        "description": "New signups to the website",  // enter your metric description here
+        "summary": "avg",  // available options: [sum|min|max|avg|last|<function>]
+        "summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "colspan": 1,
+        "height": 150,
+        "renderer": "area",
+        "interpolation": "cardinal"
+      },
+      {
+        "alias": "Amount/h by type (last 24h)",  // display name for this metric
+        "targets":
+        [
+          "fnord",
+          "fnord",
+          "fnord",
+        ],// enter your graphite barebone target expression here
+        "description": "New signups to the website",  // enter your metric description here
+        "summary": "avg",  // available options: [sum|min|max|avg|last|<function>]
+        "summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "colspan": 2,
+        "height": 150,
+        "renderer": "area",
+        "interpolation": "cardinal"
+      },
+    ]
+  },
+];
+
+var scheme = 'cool';
+/* [
+              '#423d4f',
+              '#4a6860',
+              '#848f39',
+              '#a2b73c',
+              '#ddcb53',
+              '#c5a32f',
+              '#7d5836',
+              '#963b20',
+              '#7c2626',
+              ].reverse(); */
+
+function relative_period() { return (typeof period == 'undefined') ? 1 : parseInt(period / 7) + 1; }
+function entire_period() { return (typeof period == 'undefined') ? 1 : period; }
+function at_least_a_day() { return entire_period() >= 1440 ? entire_period() : 1440; }

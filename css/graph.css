@@ -8,26 +8,6 @@
 	overflow: hidden;
 }
 
-/* ticks */
-
-.rickshaw_graph .x_tick {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 0px;
-	border-left: 1px dotted rgba(0, 0, 0, 0.2);
-	pointer-events: none;
-}
-.rickshaw_graph .x_tick .title {
-	position: absolute;
-	font-size: 12px;
-	font-family: Arial, sans-serif;
-	opacity: 0.5;
-	white-space: nowrap;
-	margin-left: 3px;
-	bottom: 1px;
-}
-
 /* annotations */
 
 .rickshaw_annotation_timeline {
@@ -114,15 +94,36 @@
 .rickshaw_graph .y_axis {
 	fill: none;
 }
+/* ticks */
+
+.rickshaw_graph .x_tick {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 0px;
+	border-left: 1px dotted rgba(255, 255, 255, 0.5);
+	pointer-events: none;
+}
+.rickshaw_graph .x_tick .title {
+  color: white;
+	position: absolute;
+	font-size: 10px;
+	font-family: Arial, sans-serif;
+	opacity: 0.5;
+	white-space: nowrap;
+	margin-left: 3px;
+	bottom: 1px;
+}
+
 .rickshaw_graph .y_ticks .tick {
-	stroke: rgba(0, 0, 0, 0.16);
+	stroke: rgba(255, 255, 255, 0.5);
 	stroke-width: 2px;
 	shape-rendering: crisp-edges;
 	pointer-events: none;
 }
 .rickshaw_graph .y_grid .tick {
 	z-index: -1;
-	stroke: rgba(0, 0, 0, 0.20);
+	stroke: rgba(255, 255, 255, 0.5);
 	stroke-width: 1px;
 	stroke-dasharray: 1 1;
 }
@@ -135,14 +136,15 @@
 	stroke: #808080;
 }
 .rickshaw_graph .y_ticks text {
+  color: white;
 	opacity: 0.5;
-	font-size: 12px;
+	font-size: 10px;
 	pointer-events: none;
 }
 .rickshaw_graph .x_tick.glow .title,
 .rickshaw_graph .y_ticks.glow text {
-	fill: black;
-	color: black;
+	fill: white;
+	color: white;
 	text-shadow: 
 		-1px 1px 0 rgba(255, 255, 255, 0.1),
 		1px -1px 0 rgba(255, 255, 255, 0.1),
