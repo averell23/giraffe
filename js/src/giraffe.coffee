@@ -1,7 +1,7 @@
 # giraffe vars
 graphite_url = graphite_url || 'demo'
 default_graphite_url = graphite_url
-default_period = 1440
+default_period = 1470
 scheme = 'classic9' if scheme is undefined
 period = default_period
 dashboard = dashboards[0]
@@ -79,20 +79,16 @@ refreshSummary = (graph) ->
 #                  {{/dashboard_description}}
 graphScaffold = ->
   graph_template = """
-                  {{#metrics}}
-                    {{#start_row}}
-                    <div class="row-fluid">
-                    {{/start_row}}
+                  <div class="row-fluid">
+                    {{#metrics}}
                       <div class="{{span}}" id="graph-{{graph_id}}">
                         <h2>{{metric_alias}} <span class="pull-right graph-summary"><span></h2>
                         <div class="chart"></div>
                         <div class="timeline"></div>
                         <div class="legend"></div>
                       </div>
-                    {{#end_row}}
-                    </div>
-                    {{/end_row}}
-                  {{/metrics}}"""
+                    {{/metrics}}
+                </div>"""
 
   $('#graphs').empty()
   context = {metrics: []}
@@ -102,13 +98,10 @@ graphScaffold = ->
   for metric, i in metrics
     colspan = if metric.colspan? then metric.colspan else 1
     context['metrics'].push
-      start_row: offset % 3 is 0
-      end_row: offset % 3 is 2
       graph_id: i
       span: 'span' + (2 * colspan)
       metric_alias: metric.alias
       metric_description: metric.description
-    offset += colspan
   $('#graphs').append Mustache.render(graph_template, context)
 
 init = ->
@@ -184,6 +177,7 @@ createGraph = (anchor, metric) ->
     null_as: if metric.null_as is undefined then null else metric.null_as
     renderer: metric.renderer || 'area'
     interpolation: metric.interpolation || 'step-before'
+    offset: metric.offset || 'zero'
     unstack: if metric.unstack is undefined then unstackable else metric.unstack
     stroke: if metric.stroke is false then false else true
     strokeWidth: metric.stroke_width
@@ -362,6 +356,7 @@ Rickshaw.Graph.Demo = Rickshaw.Class.create(Rickshaw.Graph.JSONP.Graphite,
       max: @args.max
       renderer: @args.renderer
       interpolation: @args.interpolation
+      offset: @args.offset
       stroke: @args.stroke
       strokeWidth: @args.strokeWidth
       series: [
@@ -480,12 +475,12 @@ $('#x-item-toggle').on 'click', ->
   false
 
 # hashchange allows history for dashboard + timeframe
-$(window).bind 'hashchange', (e) ->
-  timeFrame = e.getState()?.timeFrame || $(".timepanel a.range[data-timeframe='#{default_period}']")[0].text || "1d"
-  dash = e.getState()?.dashboard
-  if dash != dashboard.name
-    changeDashboard(dash)
-  $('.timepanel a.range[href="#' + timeFrame + '"]').click()
+# $(window).bind 'hashchange', (e) ->
+#   timeFrame = e.getState()?.timeFrame || $(".timepanel a.range[data-timeframe='#{default_period}']")[0].text || "1d"
+#   dash = e.getState()?.dashboard
+#   if dash != dashboard.name
+#     changeDashboard(dash)
+#   $('.timepanel a.range[href="#' + timeFrame + '"]').click()
 
 $ ->
   $(window).trigger( 'hashchange' )

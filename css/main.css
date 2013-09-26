@@ -77,7 +77,8 @@ body > .container {
 }
 
 h2 {
-    font-size: 10px;
+  font-family: Sans-Serif;
+  font-size: 15px;
 }
 
 h2, h3 {
@@ -117,6 +118,18 @@ h2, h3 {
 .nav-collapse .btn-toolbar {
     margin-top: 0px;
     margin-bottom: 0px;
+}
+
+.span2 {
+  width: 300px;
+  float: left;
+  padding: 10px;
+}
+
+.span4 {
+  width: 600px;
+  float: left;
+  padding: 10px;
 }
 /* .rickshaw_graph .detail .x_label { */
 /*     display: none; */
